@@ -2,6 +2,8 @@
 
 This Squirrel class implements logging to the Sentry platform. Simply call the `log` method to start logging your errors.
 
+**Note: This has been confirmed to work with Sentry Version 7**
+
 ## Installation
 
 1. Copy the class `SentryLogger` from `imp-sentry.nut` and place on the first line of your agent code.
