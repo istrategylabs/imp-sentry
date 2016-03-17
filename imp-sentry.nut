@@ -59,7 +59,7 @@ class SentryLogger {
 		return format("%04d-%02d-%02dT%02d:%02d:%02d", now.year, now.month + 1, now.day, now.hour, now.min, now.sec)		
 	}
 
-	function sendErrorToSentry(message, logger, errorMessage, deviceID) {
+	function log(message, logger, errorMessage, deviceID) {
 		local uuid = _generateUUID()
 		local timestamp = _getTimestamp()
 
@@ -94,5 +94,5 @@ class SentryLogger {
 
 // Usage:
 //
-// logger <- SentryLogger("{{ SENTRY_BASE_URI }}", "{{ SENTRY_KEY }}", "{{ SENTRY_SECRET }}")
-// logger.sendErrorToSentry("message", "logger", "errorMessage", "deviceID")
+// sentryLogger <- SentryLogger("{{ SENTRY_BASE_URI }}", "{{ SENTRY_KEY }}", "{{ SENTRY_SECRET }}")
+// sentryLogger.log("message", "logger", "errorMessage", "deviceID")
