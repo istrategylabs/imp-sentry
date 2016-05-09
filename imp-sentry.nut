@@ -7,11 +7,13 @@ class SentryLogger {
 	sentrySecret = null
 	XSentryAuth = null
 	headers = null
+	device = null
 
-	constructor(baseURI, key, secret) {
+	constructor(baseURI, key, secret, device) {
 		sentryBaseURI = baseURI
 		sentryKey = key
 		sentrySecret = secret
+		device = device
 		XSentryAuth = format("Sentry sentry_version=7, sentry_timestamp=%i, sentry_key=%s, sentry_secret=%s, sentry_client=imp-sentry/1.0", time(), key, secret)
 		headers = { "User-Agent": "imp-sentry/1.0", 
 					"Content-Type": "application/json", 
@@ -59,7 +61,17 @@ class SentryLogger {
 		return format("%04d-%02d-%02dT%02d:%02d:%02d", now.year, now.month + 1, now.day, now.hour, now.min, now.sec)		
 	}
 
-	function log(message, logger, errorMessage, deviceID) {
+	function watch(func) {
+		try {
+			func()
+		} catch(error) {
+			server.log("Fatal error occured: " + error)
+			server.log("Logging to Sentry")
+			log("Fatal error", "Watch Logger", error, device)
+		}
+	}
+
+	function log(message, logger, errorMessage) {
 		local uuid = _generateUUID()
 		local timestamp = _getTimestamp()
 
@@ -72,7 +84,7 @@ class SentryLogger {
 				"platform": "other",
 				"extra": {
 					"errorMessage": errorMessage,
-					"deviceID": deviceID
+					"deviceID": device
 				}
 		}
 		local body = http.jsonencode(data)
@@ -94,5 +106,5 @@ class SentryLogger {
 
 // Usage:
 //
-// sentryLogger <- SentryLogger("{{ SENTRY_BASE_URI }}", "{{ SENTRY_KEY }}", "{{ SENTRY_SECRET }}")
-// sentryLogger.log("message", "logger", "errorMessage", "deviceID")
+// sentryLogger <- SentryLogger("{{ SENTRY_BASE_URI }}", "{{ SENTRY_KEY }}", "{{ SENTRY_SECRET }}", "{{ DEVICE }}")
+// sentryLogger.log("message", "logger", "errorMessage")
