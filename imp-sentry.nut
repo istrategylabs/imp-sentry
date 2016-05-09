@@ -12,8 +12,8 @@ class SentryLogger {
 		sentryBaseURI = baseURI
 		sentryKey = key
 		sentrySecret = secret
-		XSentryAuth = format("Sentry sentry_version=7, sentry_timestamp=%i, sentry_key=%s, sentry_secret=%s, sentry_client=http-post/1.0", time(), key, secret)
-		headers = { "User-Agent": "http-post/1.0", 
+		XSentryAuth = format("Sentry sentry_version=7, sentry_timestamp=%i, sentry_key=%s, sentry_secret=%s, sentry_client=imp-sentry/1.0", time(), key, secret)
+		headers = { "User-Agent": "imp-sentry/1.0", 
 					"Content-Type": "application/json", 
 					"X-Sentry-Auth":  XSentryAuth
 		}
